@@ -42,8 +42,6 @@ and adheres to the principles of **Keep a Changelog**.
 
 ---
 
-## [0.1.0] — 2025-12-18
-
 ### Added
 
 - First public bootstrap of **vix-registry**
