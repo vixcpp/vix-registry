@@ -8,6 +8,17 @@ and adheres to the principles of **Keep a Changelog**.
 ---
 
 ## [Unreleased]
+## [0.1.0] - 2025-12-18
+
+### Added
+- 
+
+### Changed
+- 
+
+### Removed
+- 
+
 
 ### Added
 
