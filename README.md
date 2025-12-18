@@ -20,6 +20,130 @@ It showcases:
 This project is not just an example — it is the **reference implementation** of a
 registry service powered by Vix.
 
+## Overview — What is Vix Registry?
+
+**Vix Registry** is a **generic, high-performance package registry engine**
+designed to serve as the backbone for distributing packages, artifacts, and
+versioned resources in modern C++ ecosystems.
+
+Its primary goal is to provide a **fast, reliable, and extensible registry**
+similar in spirit to:
+
+- npm registry (JavaScript)
+- PyPI (Python)
+- crates.io (Rust)
+- Docker Registry (OCI)
+
+…but built **natively in C++**, on top of **Vix.cpp**, with a strong focus on:
+
+- performance
+- simplicity
+- long-term maintainability
+
+Vix Registry is **not tied to a single language or package format**.
+Instead, it exposes a clean HTTP API that can be used by:
+
+- CLI tools
+- SDKs
+- CI/CD systems
+- Build tools
+- Internal infrastructure
+
+---
+
+## How Vix Registry Is Intended to Be Used
+
+### 1. As the official registry for the Vix ecosystem
+
+Vix Registry is designed to be the **official registry backend** for:
+
+- Vix packages
+- Vix plugins and extensions
+- Prebuilt artifacts
+- Metadata and version resolution
+
+Example use cases:
+
+- `vix install my-lib`
+- `vix publish`
+- `vix update`
+
+The registry handles:
+
+- package ownership
+- versioning (SemVer)
+- authentication tokens
+- download integrity (hashes)
+- access control (public / private packages)
+
+---
+
+### 2. As a standalone registry service
+
+Vix Registry can also be deployed as a **standalone service** for:
+
+- private package registries
+- internal company tooling
+- artifact distribution
+- on-premise or cloud environments
+
+Because it is built as a regular Vix application, it can be:
+
+- deployed behind Nginx
+- containerized (Docker / Kubernetes)
+- integrated into existing infrastructure
+
+---
+
+### 3. As a reference architecture for Vix applications
+
+Beyond the registry itself, this project serves as a **reference Vix app**:
+
+- Clean separation of:
+  - HTTP layer
+  - domain logic
+  - services
+  - storage
+- Production-grade project layout
+- Real-world usage of:
+  - routing
+  - configuration
+  - authentication
+  - storage abstraction
+  - testing
+
+This makes **vix-registry** a practical blueprint for building
+large-scale applications on top of Vix.cpp.
+
+---
+
+## High-Level Flow
+
+```text
+Client (CLI / SDK / CI)
+        |
+        |  HTTP API
+        v
+  Vix Registry (Vix.cpp)
+        |
+        +-- Auth / Tokens
+        +-- Package & Version services
+        +-- Storage (FS / DB / Object storage)
+```
+
+---
+
+## Non-goals (for clarity)
+
+Vix Registry is not:
+
+1. a frontend UI
+2. a build system
+3. a package manager client
+
+It focuses exclusively on being a robust registry backend.
+Clients and tooling are expected to live outside this repository.
+
 ---
 
 ## Features
@@ -37,11 +161,11 @@ registry service powered by Vix.
 
 ```csharp
 registry/
-├── CMakeLists.txt           # si backend en C++/Vix
-├── CMakePresets.json        # presets dev/prod
-├── Makefile                 # raccourcis (dev, test, run)
-├── README.md                # vision + usage
-├── CHANGELOG.md             # versions
+├── CMakeLists.txt
+├── CMakePresets.json
+├── Makefile
+├── README.md
+├── CHANGELOG.md
 ├── LICENSE
 ├── .gitignore
 ├── config/
@@ -50,23 +174,23 @@ registry/
 │   └── config.local.example.json
 ├── docs/
 │   ├── architecture.md
-│   ├── api.md               # endpoints REST
-│   ├── storage.md           # comment on stocke les paquets
-│   ├── security.md          # tokens, scopes, permissions
+│   ├── api.md
+│   ├── storage.md
+│   ├── security.md
 │   └── roadmap.md
 ├── migrations/
 │   ├── 0001_init_schema.sql
 │   ├── 0002_add_tokens.sql
 │   └── ...
 ├── scripts/
-│   ├── dev.sh               # lancer serveur en mode dev
-│   ├── migrate.sh           # appliquer migrations
-│   └── seed.sh              # données de test
+│   ├── dev.sh
+│   ├── migrate.sh
+│   └── seed.sh
 ├── infra/
 │   ├── docker-compose.yml
 │   ├── Dockerfile
-│   ├── nginx.conf           # reverse proxy si besoin
-│   └── k8s/                 # (plus tard)
+│   ├── nginx.conf
+│   └── k8s/
 ├── include/
 │   └── vix/registry/
 │       ├── App.hpp
@@ -87,17 +211,17 @@ registry/
 │       ├── storage/
 │       │   ├── IPackageStorage.hpp
 │       │   ├── LocalFileStorage.hpp
-│       │   └── S3Storage.hpp          # plus tard
+│       │   └── S3Storage.hpp
 │       └── db/
 │           ├── Database.hpp
 │           ├── PackageRepository.hpp
 │           └── UserRepository.hpp
 ├── src/
-│   ├── main.cpp             # main() ultra minimal → appelle App
+│   ├── main.cpp
 │   ├── App.cpp
 │   ├── http/
 │   │   ├── HttpServer.cpp
-│   │   ├── Routes.cpp       # enregistre toutes les routes
+│   │   ├── Routes.cpp
 │   │   └── Middleware.cpp
 │   ├── domain/
 │   │   ├── Package.cpp
@@ -110,7 +234,7 @@ registry/
 │   │   └── AuthService.cpp
 │   ├── storage/
 │   │   ├── LocalFileStorage.cpp
-│   │   └── S3Storage.cpp        # stub au début
+│   │   └── S3Storage.cpp
 │   └── db/
 │       ├── Database.cpp
 │       ├── PackageRepository.cpp
